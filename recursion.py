@@ -80,7 +80,7 @@ def group_no_adj(start, nums, target):
 
 
     return (group_no_adj(start + 2, nums, target - nums[start]) or
-            group_no_adj(start + 2 , nums, target ))
+            group_no_adj(start + 1, nums, target ))
 
 
 
@@ -183,7 +183,7 @@ def split_odd_10(nums):
     pre: len(nums) >= 0, nums will only contain ints
     post: return True if nums can be split, False otherwise
     """
-    if sum(nums) %2 == 0 or sum(nums) < 11:
+    if sum(nums) %2 == 0:
         return False
     target1  = 0
     target2 = 0
