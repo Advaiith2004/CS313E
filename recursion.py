@@ -2,7 +2,7 @@
 Student information for this assignment:
 
 Replace <Advaith Pathi> with your name.
-On my/our honor, <Vinay Majjiga> and <FULL NAME>, this
+On my/our honor, <Vinay Majjiga> and <Advaiith Pathi>, this
 programming assignment is my own work and I have not provided this code to
 any other student.
 
