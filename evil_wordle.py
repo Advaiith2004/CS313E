@@ -430,8 +430,6 @@ def get_feedback(remaining_secret_words, guessed_word):
     feedback_colors = get_feedback_colors(remaining_secret_words[0], guessed_word)
     word_family = {}
     key_lst = []
-    for i in word_family.keys():
-        key_lst.append(i)
 
     for word in remaining_secret_words:
         feedback_key = tuple(get_feedback_colors(word, guessed_word))
@@ -439,11 +437,13 @@ def get_feedback(remaining_secret_words, guessed_word):
             word_family[feedback_key] = [word]
         else:
             word_family[feedback_key].append(word)
+    for i in word_family.keys():
+        key_lst.append(i)
     diff_lst = []
     max = 0
     word_track = None
     key = None
-    index = 0
+    diff_index = 0
     max_diff = 0
     diff_track = 0
     index_track = 0
@@ -470,19 +470,28 @@ def get_feedback(remaining_secret_words, guessed_word):
                 if k == NOT_IN_WORD_COLOR:
                     diff += 2
             diff_lst.append(diff)
-        for l in diff_lst:
-            if l > max_diff:
-                max_diff = l
-                index_track  = index
-            elif l == max_diff:
-                diff_track = 1
-                index_track = 0
-            index += 1
-        if diff_track != 1:
-            feedback_colors = key_lst[index_track]
-            new_remaining_words = remaining_secret_words[index_track]
+        sorted_diff_lst = fast_sort(diff_lst)
+        diff_value = sorted_diff_lst[len(sorted_diff_lst)-1]
+        for value in range(len(diff_lst)):
+            if diff_lst[value] == diff_value:
+                diff_index = value
+    
+        if sorted_diff_lst[len(sorted_diff_lst)-1] != sorted_diff_lst[len(sorted_diff_lst)-2]:
+            new_remaining_words = word_family[key_lst[diff_index]]
+            feedback_colors = key_lst[diff_index]
+        else: 
+            sorted_key_lst = fast_sort(key_lst)
+            ascii_key = sorted_key_lst[len(sorted_key_lst)-1]
+            new_remaining_words = word_family[ascii_key]
+            feedback_colors = ascii_key
+    
+
+    
+
 
     return feedback_colors, new_remaining_words
+
+
 
 
 # DO NOT modify this function.
