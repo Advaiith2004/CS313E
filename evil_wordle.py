@@ -336,35 +336,31 @@ def fast_sort(lst):
     """
 
     if len(lst) == 1 or len(lst) == 0:
-       return lst
+        return lst
     if len(lst) >1:
         mid = len(lst)//2
         first_half = lst[0:mid]
         second_half = lst[mid:]
-        fast_sort(first_half)
-        fast_sort(second_half)
+        first_half = fast_sort(first_half)
+        second_half = fast_sort(second_half)
+        sorted_lst= []
 
         i = 0
         j = 0
-        k = 0
         while i < len(first_half) and j < len(second_half):
             if first_half[i] < second_half[j]:
-                lst[k] = first_half[i]
+                sorted_lst.append(first_half[i])
                 i+= 1
-                k+= 1
             else:
-                lst[k] = second_half[j]
+                sorted_lst.append(second_half[j])
                 j+= 1
-                k+= 1
         while i < len(first_half):
-            lst[k] = first_half[i]
+            sorted_lst.append(first_half[i])
             i += 1
-            k += 1
         while j < len(second_half):
-            lst[k] = second_half[j]
+            sorted_lst.append(second_half[j])
             j += 1
-            k +=1
-    return lst
+    return sorted_lst
 def get_feedback_colors(secret_word, guessed_word):
     """
     Processes the guess and generates the colored feedback based on the potential secret word. This
@@ -444,10 +440,6 @@ def get_feedback(remaining_secret_words, guessed_word):
     word_track = None
     key = None
     diff_index = 0
-    max_diff = 0
-    diff_track = 0
-    index_track = 0
-
     for i in word_family.keys():
         if len(word_family[i]) > max:
             max = len(word_family[i])
@@ -475,20 +467,14 @@ def get_feedback(remaining_secret_words, guessed_word):
         for value in range(len(diff_lst)):
             if diff_lst[value] == diff_value:
                 diff_index = value
-    
         if sorted_diff_lst[len(sorted_diff_lst)-1] != sorted_diff_lst[len(sorted_diff_lst)-2]:
             new_remaining_words = word_family[key_lst[diff_index]]
             feedback_colors = key_lst[diff_index]
-        else: 
+        else:
             sorted_key_lst = fast_sort(key_lst)
-            ascii_key = sorted_key_lst[len(sorted_key_lst)-1]
+            ascii_key = sorted_key_lst[len(key_lst)-2]
             new_remaining_words = word_family[ascii_key]
             feedback_colors = ascii_key
-    
-
-    
-
-
     return feedback_colors, new_remaining_words
 
 
