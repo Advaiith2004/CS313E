@@ -113,41 +113,34 @@ class LinkedList:
     # If a term with that exponent already exists, add the coefficients together.
     # You must keep the terms in descending order by exponent.
     def insert_term(self, coeff, exp):
-    #method to insert items in order
         new_node = Node(coeff, exp)
-        if self.head is None and coeff != 0:
-            self.head = new_node
-            self.head.next = None
-        else:
-            if coeff != 0:
+        if coeff != 0:
+            if self.head is None:
+                self.head = new_node
+            elif exp > self.head.exp:
+                new_node.next = self.head
+                self.head = new_node
+            elif exp == self.head.exp:
+                self.head.coeff += coeff
+                if self.head.coeff == 0:
+                    self.head = self.head.next
+            else:
                 current = self.head
-                if exp > current.exp:
-                    new_node.next = current.next
+                inserted = False
+                while current.next is not None and not inserted:
+                    if current.next.exp == exp:
+                        current.next.coeff += coeff
+                        if current.next.coeff == 0:
+                            current.next = current.next.next
+                        inserted = True
+                    elif exp > current.next.exp:
+                        new_node.next = current.next
+                        current.next = new_node
+                        inserted = True
+                    else:
+                        current = current.next
+                if not inserted:
                     current.next = new_node
-                else:
-                    if coeff != 0:
-                        current = self.head
-                        if exp > current.exp:
-                            new_node.next = self.head
-                            self.head = new_node
-                        elif exp == current.exp:
-                            current.coeff += coeff
-                            if current.coeff == 0:
-                                self.head = current.next
-                        else:
-                            while current.next is not None:
-                                if current.next.exp == exp:
-                                    if current.next.coeff + coeff == 0:
-                                        current.next = current.next.next
-                                    else:
-                                        current.next.coeff += coeff
-                                    return
-                                elif exp > current.next.exp:
-                                    new_node.next = current.next
-                                    current.next = new_node
-                                    return
-                                current = current.next
-                            current.next = new_node
 
     # Add a polynomial p to the polynomial and return the resulting polynomial as a new linked list.
     def add(self, p):
@@ -155,17 +148,28 @@ class LinkedList:
         result = LinkedList()
         poly2 = p.head
         current = self.head
-        if current is None and poly2 is None:
-            return result
-        elif current.exp > poly2.exp:
+
+        while current is not None and poly2 is not None:
+            if current.exp > poly2.exp:
+                result.insert_term(current.coeff, current.exp)
+                current = current.next
+            elif current.exp < poly2.exp:
+                result.insert_term(poly2.coeff, poly2.exp)
+                poly2 = poly2.next
+            else:
+                coefficient = current.coeff + poly2.coeff
+                result.insert_term(coefficient, current.exp)
+                current = current.next
+                poly2 = poly2.next
+
+        while current is not None:
             result.insert_term(current.coeff, current.exp)
+            current = current.next
+
+        while poly2 is not None:
             result.insert_term(poly2.coeff, poly2.exp)
-        elif current.exp < poly2.exp:
-            result.insert_term(poly2.coeff, poly2.exp)
-            result.insert_term(current.coeff, current.exp)
-        elif current.exp == poly2.exp:
-            coefficient = current.coeff + poly2.coeff
-            result.insert_term(coefficient, current.exp)
+            poly2 = poly2.next
+
         return result
     # Multiply a polynomial p with the polynomial and return the product as a new linked list.
     def mult(self, p):
@@ -204,6 +208,7 @@ def main():
     # read data from stdin (terminal/file) using input() and create polynomial p
      # read data from stdin (terminal/file) using input() and create polynomial q
     p = ""
+    q_link = LinkedList()
     q = ""
     p_list = []
     q_list = []
@@ -230,17 +235,12 @@ def main():
     poly = LinkedList()
     for values in p_list:
         poly.insert_term(values[0], values[1])
-    added = LinkedList()
-    for values in p_list:
-        added.insert_term(values[0], values[1])
-    multiplication = LinkedList()
-    for values in p_list:
-        multiplication.insert_term(values[0], values[1])
-    for adding in q_list:
-        added.add(adding)
-    for multiply in q_list:
-        multiplication.mult(multiply)
+    q_link = LinkedList()
+    for q_values in q_list:
+        q_link.insert_term(q_values[0], q_values[1])
+    added = poly.add(q_link)
+    multiplied = poly.mult(q_link)
     print(added)
-    print(multiplication)
+    print(multiplied)
 if __name__ == "__main__":
     main()
