@@ -124,18 +124,30 @@ class LinkedList:
                 if exp > current.exp:
                     new_node.next = current.next
                     current.next = new_node
-                elif exp == current.exp:    #fix later !!!!!!
-                    current.coeff += coeff
                 else:
-                    while current.next is not None:
-                        if current.next.exp == exp:
-                            current.next.coeff += coeff
-                        elif exp > current.next.exp:
-                            new_node.next = current.next
+                    if coeff != 0:
+                        current = self.head
+                        if exp > current.exp:
+                            new_node.next = self.head
+                            self.head = new_node
+                        elif exp == current.exp:
+                            current.coeff += coeff
+                            if current.coeff == 0:
+                                self.head = current.next
+                        else:
+                            while current.next is not None:
+                                if current.next.exp == exp:
+                                    if current.next.coeff + coeff == 0:
+                                        current.next = current.next.next
+                                    else:
+                                        current.next.coeff += coeff
+                                    return
+                                elif exp > current.next.exp:
+                                    new_node.next = current.next
+                                    current.next = new_node
+                                    return
+                                current = current.next
                             current.next = new_node
-                        current = current.next
-                    new_node.next = current.next
-                    current.next = new_node
 
     # Add a polynomial p to the polynomial and return the resulting polynomial as a new linked list.
     def add(self, p):
@@ -159,9 +171,9 @@ class LinkedList:
     def mult(self, p):
         result = LinkedList()
         current = self.head
-        poly2 = p.head
-        if current is None or poly2 is None:
+        if current is None or p.head is None:
             return result
+
         while current is not None:
             poly2 = p.head
             while poly2 is not None:
@@ -170,6 +182,7 @@ class LinkedList:
                 result.insert_term(coefficent, exponent)
                 poly2 = poly2.next
             current = current.next
+
         return result
 
     # Return a string representation of the polynomial.
