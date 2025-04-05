@@ -16,6 +16,8 @@ UT EID 1: ap64999
 UT EID 2: Vrm724
 """
 
+import sys
+
 STEP_SIZE_CONSTANT = 3
 
 def is_prime(n):
@@ -170,15 +172,12 @@ def main():
     """The main function that calculates the longest reducible words"""
 
     word_lst = []
-    try:
-        while True:
-            word = input().strip()
-            if word == "":
-                break
-            if word.isalpha():
-                word_lst.append(word)
-    except EOFError:
-        pass
+    for line in sys.stdin:
+        word = line.strip()
+        if word == "":
+            break
+        if word.isalpha():
+            word_lst.append(word)
 
     len_word_lst = len(word_lst)
     n = 2 * len_word_lst + 1
