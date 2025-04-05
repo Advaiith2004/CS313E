@@ -113,13 +113,17 @@ def find_word(s, hash_table):
         return True
     else:
         og_index = index
-        while hash_table[index] != "":
-            if hash_table[index] == s:
-                return True
-            index = (index + size) % table_size
-            if index == og_index:
-                break
-    return False
+        index = (index + size) % table_size
+        if hash_table[index] == s:
+            return True
+        else:
+            while hash_table[index] != "":
+                index = (index + size) % table_size
+                if hash_table[index] == s:
+                    return True
+                elif index == og_index:
+                    return False
+
 def is_reducible(s, hash_table, hash_memo):
     """
     #Using a string, a hash table, and a hash_memo, recursively "
@@ -127,9 +131,9 @@ def is_reducible(s, hash_table, hash_memo):
     #it is entered into the hash memo and returns True. Otherwise,"
     #it returns False.
     """
-    if not find_word(s, hash_table):
+    if not find_word(s, hash_table) is True:
         return False
-    if find_word(s, hash_memo):
+    if find_word(s, hash_memo) is False:
         return True
     if len(s) == 1:
         if s == "a" or s== "i" or s== "o":
