@@ -75,18 +75,27 @@ def insert_word(s, hash_table):
     size = step_size(s)
     table_size = len(hash_table)
     index = hash_word(s, len(hash_table))
-    if s not in hash_table:
-        if hash_table[index] == '':
-            hash_table[index] = s
-        else:
-            og_index = index
-            while hash_table[index] != '':
-                index = (index + size) % table_size
-                if hash_table[index] == '':
-                    hash_table[index] = s
-                    break
-                elif index == og_index:
-                    break
+    og_index = index
+    if hash_table[index] == s:
+        return
+    else:
+        while hash_table[index] != '':
+            index = (index + size) % table_size
+            if hash_table[index] == s:
+                return
+            elif index == og_index:
+                break
+    if hash_table[index] == '':
+        hash_table[index] = s
+    else:
+        og_index = index
+        while hash_table[index] != '':
+            index = (index + size) % table_size
+            if hash_table[index] == '':
+                hash_table[index] = s
+                break
+            elif index == og_index:
+                break
 
 def find_word(s, hash_table):
     """
