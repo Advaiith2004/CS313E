@@ -57,7 +57,6 @@ def step_size(s):
     pre: s is a lowercase string.
     post: Returns the calculated step size as an integer based on the provided string.
     """
-
     key_value = hash_word(s,STEP_SIZE_CONSTANT)
     size = STEP_SIZE_CONSTANT - (key_value % STEP_SIZE_CONSTANT)
     return size
@@ -153,7 +152,6 @@ def get_longest_words(string_list):
     pre: string_list is a list of lowercase strings.
     post: Returns a list of words in string_list that have the maximum length.
     """
-    #insert, merge, quick, ord options
     len_dict = {}
     str_lst = []
     if string_list == []:
@@ -172,12 +170,15 @@ def main():
     """The main function that calculates the longest reducible words"""
 
     word_lst = []
-    while True:
-        word = input().strip()
-        if word == "":
-            break
-        if word.isalpha():
-            word_lst.append(word.lower())
+    try:
+        while True:
+            word = input().strip()
+            if word == "":
+                break
+            if word.isalpha():
+                word_lst.append(word)
+    except EOFError:
+        pass
 
     len_word_lst = len(word_lst)
     n = 2 * len_word_lst + 1
