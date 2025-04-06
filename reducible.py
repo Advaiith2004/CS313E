@@ -106,7 +106,7 @@ def find_word(s, hash_table):
     pre: s is a string, and hash_table is a list representing the hash table.
     post: Returns True if s is found in hash_table, otherwise returns False.
     """
-    if hash_table == []:
+    if hash_table == ["", "", "", "", ""]:
         return False
     index = hash_word(s, len(hash_table))
     size = step_size(s)
