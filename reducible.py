@@ -109,20 +109,15 @@ def find_word(s, hash_table):
     index = hash_word(s, len(hash_table))
     size = step_size(s)
     table_size = len(hash_table)
+    og_index = index
     if hash_table[index] == s:
         return True
-    else:
-        og_index = index
+    while hash_table[index] != "":
         index = (index + size) % table_size
         if hash_table[index] == s:
             return True
-        else:
-            while hash_table[index] != "":
-                index = (index + size) % table_size
-                if hash_table[index] == s:
-                    return True
-                elif index == og_index:
-                    return False
+        if index == og_index:
+            return False
 
 def is_reducible(s, hash_table, hash_memo):
     """
@@ -144,7 +139,6 @@ def is_reducible(s, hash_table, hash_memo):
         if is_reducible(reduced, hash_table, hash_memo):
             insert_word(s, hash_memo)
             return True
-
     return False
 
 
@@ -182,7 +176,7 @@ def main():
 
     len_word_lst = len(word_lst)
     n = 2 * len_word_lst + 1
-    while not is_prime(n):
+    if not is_prime(n) is False:
         n += 1
     hash_lst = []
     for _ in range(n):
@@ -191,7 +185,7 @@ def main():
         insert_word(word, hash_lst)
 
     m = int(0.2 * len_word_lst) + 1
-    while not is_prime(m):
+    if not is_prime(m) is False:
         m += 1
     hash_memo = []
     for _ in range(m):
