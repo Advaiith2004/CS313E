@@ -361,6 +361,20 @@ class Graph:
 
     def compute_depth(self):
         """Computes depth for each vertex in the graph."""
+        for v in self.vertices:
+            v.depth = -1
+
+        for i in range(len(self.vertices)):
+            if self.vertices[i].depth == -1:
+                stack = Stack()
+                stack.push((i, 0))
+                while not stack.is_empty():
+                    node, depth = stack.pop()
+                    if self.vertices[node].depth == -1:
+                        self.vertices[node].depth = depth
+                        for neighbor in self.get_adjacent_vertices(node):
+                            if self.vertices[neighbor].depth == -1:
+                                stack.push((neighbor, depth + 1))
 
 
     def has_cycle(self):
